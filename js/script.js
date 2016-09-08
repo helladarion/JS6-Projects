@@ -67,8 +67,8 @@ var player = {
 	health: 10,
 	strenght: 2,
 	defence: 2,
-	weapon: weaponList[0],
-	armor: armorList[0],
+	weapon: weaponList[18],
+	armor: armorList[4],
 	initiative: null,
 	attackPower: 0,
 	defencePower: 0,
@@ -80,7 +80,7 @@ var monster = {
 	health: 20,
 	strenght: 4,
 	defence: 3,
-	weapon: weaponList[0],
+	weapon: weaponList[7],
 	armor: armorList[0],
 	initiative: null,
 	attackPower: 0,
@@ -148,8 +148,10 @@ var calcPower = function(entity, type) {
 	};
 	if (type === "Attack Power") {
 		entity.attackPower = (resultPower + entity.ability + roll + bonus);
+		entity.defencePower = 0;
 	} else {
 		entity.defencePower = (resultPower + entity.ability + roll + bonus);
+		entity.attackPower = 0;
 	};
 
 	return "Your "+type+" is " + (resultPower + entity.ability + roll + bonus);
@@ -160,21 +162,34 @@ var calcPower = function(entity, type) {
 //console.log(calcPower(monster, "DP"));
 
 //Display things 
+//global Variables
+var killed = false;
 
 var Attack = function(attacker, defender) {
 	//calculate FA and FD
 	calcPower(attacker,"AP");
 	calcPower(defender,"DP")
-	var result;
-	if (defender.health <= 0) {
+	var result = null;
+	if (defender.health < 1) {
 		result = "<p class='attacker'><strong> Congratulations " + attacker.name + " you defeat " + deffender.name
 	} else {
 		if (attacker.attackPower > defender.defencePower) {
 			var damage = attacker.attackPower - defender.defencePower;
-			result = "<p class='attacker'><strong>" + attacker.name + " is attacking " + defender.name + " using his " + attacker.weapon.name + " and he hits him dealing "+ damage+" damage</strong></p>" 
+			
 			defender.health -= damage;
+			if (defender.health < 1) {
+				result = "<p class='attacker'><strong>" + attacker.name + " is attacking " + defender.name + " using his " + attacker.weapon.name + " and he hits him dealing "+ damage+" damage, and killing his Enemy</strong></p>" ;
+				$(function() {
+					$('#Atk').fadeOut(1500, function() {
+						$('#logAttack').html("<p class='description'>Game Over</p>").fadeIn(2000);
+					});
+
+				});
+			}else {
+				result = "<p class='attacker'><strong>" + attacker.name + " is attacking " + defender.name + " using his " + attacker.weapon.name + " and he hits him dealing "+ damage+" damage</strong></p>";
+			};
 		} else {
-			result = "<p class='attacker'><strong>" + attacker.name + " is attacking " + defender.name + " using his " + attacker.weapon.name + " but the he block his attack</strong></p>" 
+			result = "<p class='attacker'><strong>" + attacker.name + " is attacking " + defender.name + " using his " + attacker.weapon.name + " but he blocked his attack</strong></p>";
 		};
 	};
 	
@@ -188,7 +203,7 @@ var rounds = function() {
 		var PInit = initiative(player);
 		var MInit = initiative(monster);
 		$('#logAttack').fadeIn(2000)
-		$('#logAttack').append("<p class='description'>lets roll the iniciative</p>")
+		$('#logAttack').append("<p class='description'>lets roll the initiative</p>")
 		.append("<p class='description'> The Hero Initiative is: "+PInit+"</p>")
 		.append("<p class='description'> The Monster Initiative is: "+MInit+"</p>");
 		if (PInit > MInit) {
@@ -205,8 +220,11 @@ var rounds = function() {
 		if (EntityStart !== "Both") {
 			$('#logAttack').append("<p class='description'>"+ EntityStart +" Starting the attack!!</p>");
 			$('#Atk').fadeIn(5000)
-			.click(function (){
-				$('#logAttack').html(Attack(attacker,defender));
+			.click(function (){	
+				$('#logAttack').html(Attack(attacker,defender)).append("<p class='description'>Now is the "+defender.name+"'s Turn to Attack!!</p>");
+				var change = attacker;
+				attacker = defender;
+				defender = change;
 				updateStats();
 			});
 		} else {
@@ -224,6 +242,7 @@ $(function() {
 	$('#logAttack').hide();
 	$('#Atk').hide();
 	$('#Run').hide();
+	$('#Src').hide();
 });
 
 
