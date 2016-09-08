@@ -1,0 +1,47 @@
+div {
+	border: 1px dashed lightgrey;
+	width: 70%;
+	margin: auto;
+	text-align: center;
+	display: block;
+}
+p {
+	font-family: Tahoma, serif;
+}
+.attacker {
+	font-family: Courier;
+	color: darkorange;
+}
+.deffender {
+	font-family: Verdana;
+	color: lightblue;	
+}
+.description {
+	font-family: Courier;
+	color: grey;
+}
+#hero {
+	border: 1px dashed blue;
+	display: block;
+	left: 7px;
+	top: 7px;
+	width: 150px;
+	height: 72px;
+	position: absolute;
+}
+
+#monster {
+	border: 1px dashed red;
+	display: block;
+	right: 7px;
+	top: 7px;
+	float: right;
+	width: 150px;
+	height: 72px;
+	position: absolute;
+}
+.stats {
+	font-size: 12px;
+	margin-top: 0px;
+	font-family: Courier;
+}
