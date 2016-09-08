@@ -62,7 +62,7 @@ armorList.push(new armor("Full Plate", 1500, 3,3));
 armorList.push(new armor("Large Wooden Shield", 30, 0, 3));
 
 var player = {
-	name: "Kenshin Himura",
+	name: "Mulestia",
 	ability: 3,
 	health: 10,
 	strenght: 2,
@@ -228,8 +228,8 @@ var rounds = function() {
 				updateStats();
 			});
 		} else {
-			$('#logAttack').append("<p class='description'>"+ EntityStart +" Starting the attack, and hit eatch other with no damage!!</p>")
-			.html("<p class='description'>"+ EntityStart +" Starting the attack, and hit eatch other with no damage!!</p>");
+			$('#logAttack').html("<p class='description'>"+ EntityStart +" Starting the attack at the same time... lets re-roll!!</p>");
+			setTimeout(rounds(),5000);
 		};	
 	});	
 };
