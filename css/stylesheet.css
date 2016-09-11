@@ -8,6 +8,13 @@ div {
 p {
 	font-family: Tahoma, serif;
 }
+
+button {
+	border: 1px solid grey;
+	background-color: lightgrey;
+	color: blue;
+}
+
 .attacker {
 	font-family: Courier;
 	color: darkorange;

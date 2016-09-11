@@ -30,7 +30,7 @@ weaponList.push(new weapon("Crosbow Arrow (10)",1,0,0));
 weaponList.push(new weapon("Club",0,1,2));
 weaponList.push(new weapon("Alchemist Fire",20,1,2));
 weaponList.push(new weapon("Sling",0,1,1));
-weaponList.push(new weapon("Sling Rocks(10)",1,0,0));
+weaponList.push(new weapon("Sling Bullets(10)",5,0,0));
 weaponList.push(new weapon("Spear",2,1,2));
 weaponList.push(new weapon("Light Mace",5,1,2));
 weaponList.push(new weapon("Halberd",10,2,0));
@@ -117,11 +117,11 @@ DoubleDamage: higher value on dices doubles the Strenght or Armor
 */
 
 var initiative = function(entity) {
-	var roll = rollDice(6)
+	var roll = rollDice(6);
 	entity.initiative = (roll + entity.ability);
 	console.log("You Roll: " + roll +" and sum " + entity.ability + " from your ability. Total: " + entity.initiative);
 	return entity.initiative;
-}
+};
 
 //Calculate Attack Power and Defence Power
 var calcPower = function(entity, type) {
@@ -140,22 +140,22 @@ var calcPower = function(entity, type) {
 		times = entity.armor.fd;
 		roll = rollDice(6,times);
 		bonus = entity.armor.bonus;
-	};
+	}
 	if ( roll === (6 * times) ) { //calculates CriticalStrike
 		resultPower = (calcType * 2);
 	} else {
 		resultPower = calcType;
-	};
+	}
 	if (type === "Attack Power") {
 		entity.attackPower = (resultPower + entity.ability + roll + bonus);
 		entity.defencePower = 0;
 	} else {
 		entity.defencePower = (resultPower + entity.ability + roll + bonus);
 		entity.attackPower = 0;
-	};
+	}
 
 	return "Your "+type+" is " + (resultPower + entity.ability + roll + bonus);
-}
+};
 
 //console.log(calcPower(player, "AP"));
 
@@ -168,10 +168,10 @@ var killed = false;
 var Attack = function(attacker, defender) {
 	//calculate FA and FD
 	calcPower(attacker,"AP");
-	calcPower(defender,"DP")
+	calcPower(defender,"DP");
 	var result = null;
 	if (defender.health < 1) {
-		result = "<p class='attacker'><strong> Congratulations " + attacker.name + " you defeat " + deffender.name
+		result = "<p class='attacker'><strong> Congratulations " + attacker.name + " you defeat " + deffender.name;
 	} else {
 		if (attacker.attackPower > defender.defencePower) {
 			var damage = attacker.attackPower - defender.defencePower;
@@ -187,11 +187,11 @@ var Attack = function(attacker, defender) {
 				});
 			}else {
 				result = "<p class='attacker'><strong>" + attacker.name + " is attacking " + defender.name + " using his " + attacker.weapon.name + " and he hits him dealing "+ damage+" damage</strong></p>";
-			};
+			}
 		} else {
 			result = "<p class='attacker'><strong>" + attacker.name + " is attacking " + defender.name + " using his " + attacker.weapon.name + " but he blocked his attack</strong></p>";
-		};
-	};
+		}
+	}
 	
 	return result;
 };
@@ -202,10 +202,13 @@ var rounds = function() {
 	$(function() {
 		var PInit = initiative(player);
 		var MInit = initiative(monster);
-		$('#logAttack').fadeIn(2000)
-		$('#logAttack').append("<p class='description'>lets roll the initiative</p>")
-		.append("<p class='description'> The Hero Initiative is: "+PInit+"</p>")
-		.append("<p class='description'> The Monster Initiative is: "+MInit+"</p>");
+
+
+
+		$('#logAttack').fadeIn(100);
+		$("<p class='description'>lets roll the initiative</p>").hide().appendTo('#logAttack').fadeIn(2000);
+		$("<p class='description'> The Hero Initiative is: "+PInit+"</p>").hide().appendTo('#logAttack').fadeIn(2000);
+		$("<p class='description'> The Monster Initiative is: "+MInit+"</p>").appendTo('#logAttack').fadeIn(2000);
 		if (PInit > MInit) {
 			EntityStart = "Hero";
 			attacker=player;
@@ -230,7 +233,7 @@ var rounds = function() {
 		} else {
 			$('#logAttack').html("<p class='description'>"+ EntityStart +" Starting the attack at the same time... lets re-roll!!</p>");
 			setTimeout(rounds(),5000);
-		};	
+		}	
 	});	
 };
 
@@ -256,8 +259,8 @@ function updateStats() {
 		$('#monster').fadeIn(2500);
 		$('#monster').html('<p class="stats">Monster: '+monster.name+ '<br /> HP: <strong>'+monster.health+'</strong><br />Use: '+monster.weapon.name+'<br /> Attack Power: '+ monster.attackPower+'<br /> Defence Power: '+ monster.defencePower+'</p>');
 	});
-};
+}
 
 rounds();
-
+//console.log(rollDice(20, 5));
 //updateStats();
